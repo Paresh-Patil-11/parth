@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useTheme, useMediaQuery } from '@mui/material';
+import RashiCard from '../components/Cards/RashiCard';
 
 const allSigns = [
   {
@@ -63,7 +65,11 @@ const allSigns = [
   },
 ];
 
-const CarouselRow = ({ items, cardsPerView }) => {
+const CarouselRow = ({ items, cardsPerView, onCardClick }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
 
@@ -94,34 +100,45 @@ const CarouselRow = ({ items, cardsPerView }) => {
     }
   }, [currentIndex, items.length]);
 
-  const cardWidthPercentage = 100 / cardsPerView;
+  const getCardsPerView = () => {
+    if (isMobile) return 1;
+    if (isTablet) return 2;
+    return cardsPerView;
+  };
+
+  const actualCardsPerView = getCardsPerView();
+  const cardWidthPercentage = 100 / actualCardsPerView;
 
   return (
     <div className="carousel-container">
       <div
         className="carousel-slider"
         style={{
-          transform: `translateX(-${currentIndex * (150 / items.length)}%)`,
+          transform: `translateX(-${currentIndex * (100 / items.length)}%)`,
           transition: isTransitionEnabled ? "transform 1s linear" : "none",
         }}
       >
-        {extendedItems.map((skill, idx) => (
+        {extendedItems.map((sign, idx) => (
           <div
             key={idx}
             className="skill-item"
-            style={{ flex: `0 0 ${cardWidthPercentage}%` }}
+            style={{ 
+              flex: `0 0 ${cardWidthPercentage}%`,
+              cursor: 'pointer'
+            }}
+            onClick={() => onCardClick(sign)}
           >
             <div className="skill-card">
               <div className="skill-icon-wrapper">
                 <img
                   className="skill-icon"
-                  src={skill.img}
-                  alt={`${skill.name} icon`}
+                  src={sign.img}
+                  alt={`${sign.name} icon`}
                   loading="lazy"
                 />
               </div>
-              <h3 className="skill-name">{skill.name}</h3>
-              <p className="skill-description">{skill.desc}</p>
+              <h3 className="skill-name">{sign.name}</h3>
+              <p className="skill-description">{sign.desc}</p>
             </div>
           </div>
         ))}
@@ -131,45 +148,181 @@ const CarouselRow = ({ items, cardsPerView }) => {
 };
 
 const RashiBox = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
+  const [selectedRashi, setSelectedRashi] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  
   const firstRowSigns = allSigns.slice(0, 6);
   const secondRowSigns = allSigns.slice(6, 12);
   const CARDS_PER_ROW = 4;
 
-  return (
-    <section id="skills" className="skills-section">
-      <div className="container">
-        <div
-          className="d-flex flex-column justify-content-center align-items-center mb-0"
-          style={{ textAlign: "center" }}
-        >
-          <h1 className="section-title">Astrological Signs</h1>
-          <p className="section-subtitle">
-            The zodiac signs in Vedic astrology with their qualities
-          </p>
-        </div>
+  const handleCardClick = (rashi) => {
+    setSelectedRashi(rashi);
+    setModalOpen(true);
+  };
 
-        <CarouselRow items={firstRowSigns} cardsPerView={CARDS_PER_ROW} />
-        <CarouselRow items={secondRowSigns} cardsPerView={CARDS_PER_ROW} />
-      </div>
-      <style>{`
-        .skills-section { padding: 3rem 0; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-        .section-title { font-family: Georgia, serif; font-size: 2.5rem; }
-        .section-subtitle { font-family: Georgia, serif; font-size: 1.25rem; margin-bottom: 2rem; }
-        .carousel-container { width: 100%; overflow: hidden; margin-bottom: 1.5rem; }
-        .carousel-slider { display: flex; }
-        .skill-item { box-sizing: border-box; padding: 0 10px; }
-        .skill-card {
-          background-color: inherit; border: 1px solid #ddd; border-radius: 12px;
-          padding: 1.5rem; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-          height: 100%; display: flex; flex-direction: column; align-items: center;
-        }
-        .skill-icon-wrapper { margin-bottom: 0.75rem; }
-        .skill-icon { width: 60px; height: 60px; object-fit: contain; border-radius: 50%; }
-        .skill-name { font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0; }
-        .skill-description { font-size: 0.9rem; color: #555; line-height: 1.4; }
-      `}</style>
-    </section>
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setSelectedRashi(null);
+  };
+
+  return (
+    <>
+      <section id="skills" className="skills-section">
+        <div className="container">
+          <div
+            className="d-flex flex-column justify-content-center align-items-center mb-0"
+            style={{ textAlign: "center" }}
+          >
+            <h1 className="section-title">Astrological Signs</h1>
+            <p className="section-subtitle">
+              Click on any zodiac sign to discover detailed insights about personality, career, health, and more
+            </p>
+          </div>
+
+          <CarouselRow 
+            items={firstRowSigns} 
+            cardsPerView={CARDS_PER_ROW}
+            onCardClick={handleCardClick}
+          />
+          <CarouselRow 
+            items={secondRowSigns} 
+            cardsPerView={CARDS_PER_ROW}
+            onCardClick={handleCardClick}
+          />
+        </div>
+        
+        <style>{`
+          .skills-section { 
+            padding: ${isMobile ? '2rem 0' : '3rem 0'}; 
+            background: linear-gradient(135deg, rgba(245,250,225,0.3) 0%, rgba(229,190,181,0.1) 100%);
+          }
+          .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 ${isMobile ? '10px' : '15px'}; 
+          }
+          .section-title { 
+            font-family: Georgia, serif; 
+            font-size: ${isMobile ? '2rem' : '2.5rem'}; 
+            color: #896C6C;
+            font-weight: 700;
+            margin-bottom: 1rem;
+          }
+          .section-subtitle { 
+            font-family: Georgia, serif; 
+            font-size: ${isMobile ? '1rem' : '1.25rem'}; 
+            margin-bottom: ${isMobile ? '1.5rem' : '2rem'};
+            color: #5A5A5A;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .carousel-container { 
+            width: 100%; 
+            overflow: hidden; 
+            margin-bottom: ${isMobile ? '1rem' : '1.5rem'}; 
+          }
+          .carousel-slider { 
+            display: flex; 
+          }
+          .skill-item { 
+            box-sizing: border-box; 
+            padding: 0 ${isMobile ? '5px' : '10px'}; 
+          }
+          .skill-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(229,190,181,0.1) 100%);
+            border: 2px solid rgba(137,108,108,0.2); 
+            border-radius: 16px;
+            padding: ${isMobile ? '1rem' : '1.5rem'}; 
+            text-align: center; 
+            box-shadow: 0 8px 32px rgba(137,108,108,0.12);
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+          }
+          .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(137,108,108,0.1) 0%, rgba(229,190,181,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+          }
+          .skill-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(137,108,108,0.25);
+            border-color: #896C6C;
+          }
+          .skill-card:hover::before {
+            opacity: 1;
+          }
+          .skill-card:hover .skill-name {
+            color: #896C6C;
+          }
+          .skill-icon-wrapper { 
+            margin-bottom: ${isMobile ? '0.5rem' : '0.75rem'}; 
+            position: relative;
+            z-index: 1;
+          }
+          .skill-icon { 
+            width: ${isMobile ? '50px' : '60px'}; 
+            height: ${isMobile ? '50px' : '60px'}; 
+            object-fit: contain; 
+            border-radius: 50%; 
+            border: 3px solid #896C6C;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(137,108,108,0.2);
+          }
+          .skill-card:hover .skill-icon {
+            border-color: #6B5555;
+            box-shadow: 0 8px 24px rgba(137,108,108,0.3);
+          }
+          .skill-name { 
+            font-size: ${isMobile ? '1rem' : '1.1rem'}; 
+            font-weight: 600; 
+            margin: ${isMobile ? '0.25rem 0' : '0.5rem 0'};
+            color: #2C2C2C;
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 1;
+          }
+          .skill-description { 
+            font-size: ${isMobile ? '0.8rem' : '0.9rem'}; 
+            color: #5A5A5A; 
+            line-height: 1.4; 
+            margin: 0;
+            position: relative;
+            z-index: 1;
+          }
+          
+          @media (max-width: 600px) {
+            .skills-section { padding: 1.5rem 0; }
+            .container { padding: 0 5px; }
+            .skill-card { padding: 1rem; }
+            .section-title { font-size: 1.75rem; }
+            .section-subtitle { font-size: 0.9rem; }
+          }
+        `}</style>
+      </section>
+      
+      <RashiCard
+        rashi={selectedRashi}
+        open={modalOpen}
+        onClose={handleModalClose}
+      />
+    </>
   );
 };
 
