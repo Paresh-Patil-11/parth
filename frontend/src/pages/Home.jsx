@@ -13,17 +13,15 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ScheduleForm from "../components/Forms/ScheduleForm";
 import api from "../services/api";
-import RashiBox from './RashiBox'
+import RashiBox from "./RashiBox";
+import Blog from './Blog'
 
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [rashis, setRashis] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [showScheduleForm, setShowScheduleForm] = useState(false);
-  const [selectedRashi, setSelectedRashi] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -103,22 +101,12 @@ const Home = () => {
             variant="contained"
             size="large"
             sx={{ backgroundColor: "white", color: theme.palette.primary.main }}
-            onClick={() => setShowScheduleForm(true)}
+            onClick={() => navigate("/contact")} // ✅ Navigate directly
           >
             Schedule Consultation
           </Button>
         </Container>
       </Box>
-
-      {/* Schedule Form Section */}
-      {showScheduleForm && (
-        <Container maxWidth="md" sx={{ my: 4 }}>
-          <ScheduleForm
-            prefillRashi={selectedRashi}
-            onSuccess={() => setShowScheduleForm(false)}
-          />
-        </Container>
-      )}
 
       {/* About Astrology Section */}
       <Box
@@ -138,7 +126,11 @@ const Home = () => {
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ maxWidth: "600px", textAlign: "justify", fontSize: '1.15rem' }}
+                sx={{
+                  maxWidth: "600px",
+                  textAlign: "justify",
+                  fontSize: "1.15rem",
+                }}
               >
                 Astrology, rooted in the ancient science of Jyotish Shastra,
                 studies the influence of celestial movements on human life. It
@@ -152,7 +144,11 @@ const Home = () => {
 
               <Typography
                 variant="body1"
-                sx={{ maxWidth: "600px", textAlign: "justify", fontSize: '1.15rem' }}
+                sx={{
+                  maxWidth: "600px",
+                  textAlign: "justify",
+                  fontSize: "1.15rem",
+                }}
               >
                 In today’s fast-paced world, astrology acts as a compass that
                 connects timeless wisdom with modern living. It empowers
@@ -182,42 +178,16 @@ const Home = () => {
       </Box>
 
       {/* Rashis Grid */}
-      <RashiBox></RashiBox>
+      <RashiBox />
+
 
       {/* Reviews Section */}
       <Container maxWidth="lg" sx={{ my: 6 }}>
         <Typography variant="h3" align="center" gutterBottom>
-          Client Feedback
+          Client Testimonials
         </Typography>
-        <Grid container spacing={3} sx={{ mt: 2 }}>
-          {reviews.map((review) => (
-            <Grid item xs={12} md={4} key={review.id}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  height: "100%",
-                  backgroundColor: "white",
-                  border: `2px solid ${theme.palette.custom.borderColor}`,
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                  <Box
-                    component="img"
-                    src={review.photo_url || "/images/avatar-default.jpg"}
-                    alt={review.name}
-                    sx={{ width: 60, height: 60, borderRadius: "50%", mr: 2 }}
-                  />
-                  <Box>
-                    <Typography variant="h6">{review.name}</Typography>
-                    <Rating value={review.rating} readOnly />
-                  </Box>
-                </Box>
-                <Typography variant="body2">"{review.text}"</Typography>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
+              <Blog></Blog>
+
       </Container>
     </Box>
   );
