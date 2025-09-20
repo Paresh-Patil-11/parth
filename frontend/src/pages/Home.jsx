@@ -6,7 +6,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   Button,
   Rating,
   Paper,
@@ -16,12 +15,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import RashiBox from "./RashiBox";
-import Blog from './Blog'
+import Blog from "./Blog";
+import DailyHoroscope from "./DailyHoroscope";
 
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("lg"));
   const [rashis, setRashis] = useState([]);
   const [reviews, setReviews] = useState([]);
 
@@ -48,13 +49,13 @@ const Home = () => {
       <Box
         sx={{
           position: "relative",
-          minHeight: "90vh",
+          minHeight: { xs: "80vh", md: "90vh" },
           width: "100%",
           display: "flex",
-          alignItems: "flex-end",
+          alignItems: { xs: "end", md: "flex-end" },
           justifyContent: "center",
           color: "white",
-          textAlign: "start",
+          textAlign: { xs: "end", md: "start" },
           p: { xs: 2, md: 4 },
           overflow: "hidden",
         }}
@@ -65,7 +66,7 @@ const Home = () => {
           loop
           muted
           playsInline
-          src="/public/images/backgrounds/header.mp4"
+          poster="/images/hero-poster.jpg"
           style={{
             position: "absolute",
             top: 0,
@@ -75,7 +76,10 @@ const Home = () => {
             objectFit: "cover",
             zIndex: -2,
           }}
-        />
+        >
+          <source src="/images/backgrounds/header.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
         {/* Gradient Overlay */}
         <Box
@@ -85,67 +89,65 @@ const Home = () => {
             left: 0,
             width: "100%",
             height: "100%",
-            background: "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
-            zIndex: -1,
+            background: "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7))",
           }}
         />
 
         {/* Hero Content */}
-        <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-          <Typography 
-            variant={isMobile ? "h3" : "h2"} 
-            gutterBottom
-            sx={{
-              fontWeight: 700,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-              mb: 2
-            }}
-          >
-            Transform Your Life with Nisha Gupta
-          </Typography>
-          <Typography 
-            variant={isMobile ? "h6" : "h5"} 
-            sx={{ 
-              mb: 2,
-              textShadow: '1px 1px 2px rgba(0,0,0,0.7)',
-              maxWidth: '800px'
-            }}
-          >
-            Astrologer & Vastu Consultant
-          </Typography>
-          <Typography 
-            variant={isMobile ? "body1" : "h6"} 
-            sx={{ 
-              mb: 4,
-              textShadow: '1px 1px 2px rgba(0,0,0,0.7)',
-              fontStyle: 'italic',
-              opacity: 0.95,
-              maxWidth: '900px'
-            }}
-          >
-            "Guiding you toward a more fulfilling life through practical astrological solutions and lifestyle adjustments that strengthen positive planetary influences"
-          </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{ 
-              backgroundColor: "white", 
-              color: theme.palette.primary.main,
-              py: { xs: 1.5, md: 2 },
-              px: { xs: 3, md: 4 },
-              fontSize: { xs: '1rem', md: '1.1rem' },
-              fontWeight: 600,
-              boxShadow: '0 8px 24px rgba(255,255,255,0.3)',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 12px 32px rgba(255,255,255,0.4)'
-              }
-            }}
-            onClick={() => navigate("/contact")}
-          >
-            Schedule Your Consultation
-          </Button>
+        <Container
+          maxWidth="lg"
+          sx={{ position: "relative", zIndex: 1, pb: { xs: 0, md: 1 } }}
+        >
+          <Box sx={{ maxWidth: { xs: "100%", md: "800px" } }}>
+            <Typography
+              variant={isMobile ? "h3" : "h1"}
+              gutterBottom
+              sx={{
+                fontWeight: 700,
+                textShadow: "2px 2px 4px rgba(0,0,0,0.7)",
+                mb: { xs: 2, md: 3 },
+                fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
+                lineHeight: 1.2,
+              }}
+            >
+              Transform Your Life with Nisha Gupta
+            </Typography>
+            <Typography
+              variant={isMobile ? "h6" : "h4"}
+              sx={{
+                mb: { xs: 2, md: 3 },
+                textShadow: "1px 1px 2px rgba(0,0,0,0.7)",
+                fontWeight: 600,
+                fontSize: { xs: "1.2rem", md: "2rem" },
+              }}
+            >
+              Astrologer & Vastu Consultant
+            </Typography>
+
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                backgroundColor: "white",
+                color: theme.palette.primary.main,
+                py: { xs: 1.5, md: 2.5 },
+                px: { xs: 3, md: 5 },
+                fontSize: { xs: "1rem", md: "1.2rem" },
+                fontWeight: 600,
+                boxShadow: "0 8px 24px rgba(255,255,255,0.3)",
+                borderRadius: 3,
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.95)",
+                  transform: "translateY(-3px)",
+                  boxShadow: "0 12px 32px rgba(255,255,255,0.4)",
+                },
+              }}
+              onClick={() => navigate("/contact")}
+            >
+              Schedule Consultation
+            </Button>
+          </Box>
         </Container>
       </Box>
 
@@ -153,44 +155,48 @@ const Home = () => {
       <Box
         sx={{
           width: "100%",
-          minHeight: { xs: 'auto', md: "100vh" },
+          minHeight: { xs: "auto", md: "90vh" },
           display: "flex",
           alignItems: "center",
-          py: { xs: 6, md: 8 },
-          background: 'linear-gradient(135deg, rgba(245,250,225,0.3) 0%, rgba(229,190,181,0.1) 100%)'
+          py: { xs: 6, md: 10 },
+          background:
+            "linear-gradient(135deg, rgba(245,250,225,0.4) 0%, rgba(229,190,181,0.2) 100%)",
         }}
       >
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 3, md: 6 }} alignItems="center">
+          <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
             {/* Left Side - Text Content */}
-            <Grid item xs={12} md={7}>
-              <Typography 
-                variant={isMobile ? "h4" : "h3"} 
+            <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
+              <Typography
+                variant={isMobile ? "h4" : "h2"}
                 gutterBottom
-                sx={{ 
-                  color: '#896C6C', 
+                sx={{
+                  color: "#896C6C",
                   fontWeight: 700,
-                  mb: 3
+                  mb: { xs: 3, md: 4 },
+                  fontSize: { xs: "1.8rem", md: "2.5rem" },
                 }}
               >
                 Why Choose Nisha Gupta?
               </Typography>
-              
+
               <Typography
                 variant="body1"
                 sx={{
                   maxWidth: "700px",
                   textAlign: "justify",
-                  fontSize: { xs: '1rem', md: '1.15rem' },
+                  fontSize: { xs: "1rem", md: "1.2rem" },
                   lineHeight: 1.7,
-                  mb: 3,
-                  color: '#2C2C2C'
+                  mb: { xs: 3, md: 4 },
+                  color: "#2C2C2C",
                 }}
               >
-                With extensive experience in Vedic astrology and Vastu consultation, Nisha Gupta offers 
-                a unique approach that goes beyond traditional predictions. Her methodology focuses on 
-                practical lifestyle adjustments and consistent habits that strengthen positive planetary 
-                influences, helping you move steadily toward your goals.
+                With extensive experience in Vedic astrology and Vastu
+                consultation, Nisha Gupta offers a unique approach that goes
+                beyond traditional predictions. Her methodology focuses on
+                practical lifestyle adjustments and consistent habits that
+                strengthen positive planetary influences, helping you move
+                steadily toward your goals.
               </Typography>
 
               <Typography
@@ -198,105 +204,132 @@ const Home = () => {
                 sx={{
                   maxWidth: "700px",
                   textAlign: "justify",
-                  fontSize: { xs: '1rem', md: '1.15rem' },
+                  fontSize: { xs: "1rem", md: "1.2rem" },
                   lineHeight: 1.7,
-                  mb: 3,
-                  color: '#2C2C2C'
+                  mb: { xs: 3, md: 4 },
+                  color: "#2C2C2C",
                 }}
               >
-                She understands your shortcomings even before you do, and guides you to improve them 
-                step by step through practical lifestyle adjustments and Vastu-based suggestions. By 
-                blending the ancient wisdom of Astrology and Vastu with today's modern needs, she offers 
-                guidance that feels both timeless and relevant.
+                She understands your shortcomings even before you do, and guides
+                you to improve them step by step through practical lifestyle
+                adjustments and Vastu-based suggestions. By blending the ancient
+                wisdom of Astrology and Vastu with today's modern needs, she
+                offers guidance that feels both timeless and relevant.
               </Typography>
 
-              <Box 
-                sx={{ 
-                  p: 3, 
-                  background: 'linear-gradient(135deg, rgba(137,108,108,0.1) 0%, rgba(229,190,181,0.15) 100%)',
-                  borderRadius: 2,
-                  border: '2px solid rgba(137,108,108,0.2)',
-                  mt: 4
+              <Box
+                sx={{
+                  p: { xs: 3, md: 4 },
+                  background:
+                    "linear-gradient(135deg, rgba(137,108,108,0.1) 0%, rgba(229,190,181,0.15) 100%)",
+                  borderRadius: 3,
+                  border: "2px solid rgba(137,108,108,0.2)",
+                  mt: { xs: 4, md: 5 },
                 }}
               >
                 <Typography
                   variant="h6"
                   sx={{
-                    fontStyle: 'italic',
-                    color: '#896C6C',
+                    fontStyle: "italic",
+                    color: "#896C6C",
                     fontWeight: 600,
-                    textAlign: 'center',
-                    fontSize: { xs: '1.1rem', md: '1.25rem' }
+                    textAlign: "center",
+                    fontSize: { xs: "1.1rem", md: "1.35rem" },
+                    lineHeight: 1.4,
                   }}
                 >
-                  "Vastu plays a key role in balancing planetary influences that may not be fully supportive in your birth chart."
+                  "Vastu plays a key role in balancing planetary influences that
+                  may not be fully supportive in your birth chart."
                 </Typography>
               </Box>
             </Grid>
 
             {/* Right Side - Image */}
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }}>
               <Box
                 sx={{
-                  position: 'relative',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center'
+                  position: "relative",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Box
                   component="img"
-                  src="/public/images/nisha-gupta-main.jpg"
+                  src="/images/nisha-gupta-main.jpg"
                   alt="Nisha Gupta - Astrologer & Vastu Consultant"
                   sx={{
                     width: "100%",
-                    maxWidth: 400,
+                    maxWidth: { xs: 350, md: 450 },
                     height: "auto",
                     objectFit: "cover",
-                    borderRadius: 3,
-                    boxShadow: '0 12px 40px rgba(137,108,108,0.25)',
-                    border: '3px solid #896C6C'
+                    borderRadius: 4,
+                    boxShadow: "0 16px 48px rgba(137,108,108,0.25)",
+                    border: "4px solid #896C6C",
+                    transition: "transform 0.3s ease",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                    },
                   }}
                 />
-                
-                {/* Floating Elements */}
+
+                {/* Floating Elements - Only show on larger screens */}
                 <Box
                   sx={{
-                    position: 'absolute',
-                    top: -20,
-                    right: -20,
-                    background: 'linear-gradient(135deg, #896C6C 0%, #E5BEB5 100%)',
-                    color: 'white',
-                    p: 2,
-                    borderRadius: '50%',
-                    boxShadow: '0 8px 24px rgba(137,108,108,0.3)',
-                    display: { xs: 'none', md: 'flex' },
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 80,
-                    height: 80
+                    position: "absolute",
+                    top: { xs: -10, md: -20 },
+                    right: { xs: -10, md: -20 },
+                    background:
+                      "linear-gradient(135deg, #896C6C 0%, #E5BEB5 100%)",
+                    color: "white",
+                    p: { xs: 1.5, md: 2 },
+                    borderRadius: "50%",
+                    boxShadow: "0 8px 24px rgba(137,108,108,0.3)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: { xs: 60, md: 80 },
+                    height: { xs: 60, md: 80 },
                   }}
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 700, textAlign: 'center', fontSize: '0.75rem' }}>
-                    Vastu<br/>Expert
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 700,
+                      textAlign: "center",
+                      fontSize: { xs: "0.65rem", md: "0.75rem" },
+                    }}
+                  >
+                    Vastu
+                    <br />
+                    Expert
                   </Typography>
                 </Box>
-                
+
                 <Box
                   sx={{
-                    position: 'absolute',
-                    bottom: -15,
-                    left: -15,
-                    background: 'linear-gradient(135deg, #E5BEB5 0%, #F5FAE1 100%)',
-                    color: '#896C6C',
-                    p: 2,
+                    position: "absolute",
+                    bottom: { xs: -10, md: -15 },
+                    left: { xs: -10, md: -15 },
+                    background:
+                      "linear-gradient(135deg, #E5BEB5 0%, #F5FAE1 100%)",
+                    color: "#896C6C",
+                    p: { xs: 1.5, md: 2 },
                     borderRadius: 2,
-                    boxShadow: '0 8px 24px rgba(137,108,108,0.2)',
-                    display: { xs: 'none', md: 'block' }
+                    boxShadow: "0 8px 24px rgba(137,108,108,0.2)",
                   }}
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.85rem' }}>
-                    25+ Years<br/>Experience
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: { xs: "0.75rem", md: "0.85rem" },
+                      textAlign: "center",
+                    }}
+                  >
+                    15+ Years
+                    <br />
+                    Experience
                   </Typography>
                 </Box>
               </Box>
@@ -306,94 +339,118 @@ const Home = () => {
       </Box>
 
       {/* Services Preview */}
-      <Box sx={{ py: { xs: 6, md: 8 }, background: 'rgba(255,255,255,0.8)' }}>
+      <Box sx={{ py: { xs: 6, md: 10 }, background: "rgba(255,255,255,0.9)" }}>
         <Container maxWidth="lg">
-          <Typography 
-            variant={isMobile ? "h4" : "h3"} 
-            align="center" 
+          <Typography
+            variant={isMobile ? "h4" : "h2"}
+            align="center"
             gutterBottom
-            sx={{ 
-              color: '#896C6C', 
+            sx={{
+              color: "#896C6C",
               fontWeight: 700,
-              mb: 4
+              mb: { xs: 4, md: 6 },
+              fontSize: { xs: "1.8rem", md: "2.5rem" },
             }}
           >
             Specialized Consultation Services
           </Typography>
-          
-          <Grid container spacing={4}>
+
+          <Grid container spacing={{ xs: 3, md: 4 }}>
             {[
               {
-                title: "Health Consultation",
-                description: "Explore planetary influences on your well-being and discover the lifestyle changes essential for a healthier tomorrow.",
-                icon: "🌿"
+                title: "Vastu Consultation",
+                description:
+                  "Balance planetary influences through strategic space alignment and energy optimization for homes and offices.",
+                icon: "🏠",
+                path: "/Services",
               },
               {
-                title: "Career Guidance", 
-                description: "Identify subtle shifts in attitude and perspective that reveal whether your current career direction supports your growth.",
-                icon: "💼"
+                title: "Health Consultation",
+                description:
+                  "Explore planetary influences on your well-being and discover the lifestyle changes essential for a healthier tomorrow.",
+                icon: "🌿",
+                path: "/Services",
+              },
+              {
+                title: "Career Guidance",
+                description:
+                  "Identify subtle shifts in attitude and perspective that reveal whether your current career direction supports your growth.",
+                icon: "💼",
+                path: "/Services",
               },
               {
                 title: "Marriage & Relationships",
-                description: "Uncover patterns, hidden challenges, and personal blind spots to guide you toward stronger connections.",
-                icon: "💕"
+                description:
+                  "Uncover patterns, hidden challenges, and personal blind spots to guide you toward stronger connections.",
+                icon: "💕",
+                path: "/Services",
               },
               {
                 title: "Parenting & Children",
-                description: "Map a path for your children's brighter future with supportive parenting techniques and lifestyle adjustments.",
-                icon: "👶"
+                description:
+                  "Map a path for your children's brighter future with supportive parenting techniques and lifestyle adjustments.",
+                icon: "👶",
+                path: "/Services",
               },
               {
                 title: "Financial Prosperity",
-                description: "Examine your horoscope for habits and energies blocking financial flow and discover realistic changes for abundance.",
-                icon: "💰"
+                description:
+                  "Examine your horoscope for habits and energies blocking financial flow and discover realistic changes for abundance.",
+                icon: "💰",
+                path: "/Services",
               },
-              {
-                title: "Vastu Consultation",
-                description: "Balance planetary influences through strategic space alignment and energy optimization for homes and offices.",
-                icon: "🏠"
-              }
             ].map((service, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card
+                  onClick={() => navigate(service.path)}
                   sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(229,190,181,0.05) 100%)',
-                    border: '2px solid rgba(137,108,108,0.1)',
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(229,190,181,0.05) 100%)",
+                    border: "2px solid rgba(137,108,108,0.1)",
                     borderRadius: 3,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: '0 16px 48px rgba(137,108,108,0.2)',
-                      borderColor: '#896C6C'
-                    }
+                    cursor: "pointer",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "translateY(-8px) scale(1.02)",
+                      boxShadow: "0 20px 60px rgba(137,108,108,0.2)",
+                      borderColor: "#896C6C",
+                    },
                   }}
                 >
-                  <CardContent sx={{ flexGrow: 1, textAlign: 'center', p: 3 }}>
-                    <Typography 
-                      variant="h3" 
-                      sx={{ mb: 2, fontSize: '3rem' }}
+                  <CardContent
+                    sx={{
+                      flexGrow: 1,
+                      textAlign: "center",
+                      p: { xs: 3, md: 4 },
+                    }}
+                  >
+                    <Typography
+                      variant="h2"
+                      sx={{ mb: 2, fontSize: { xs: "2.5rem", md: "3rem" } }}
                     >
                       {service.icon}
                     </Typography>
-                    <Typography 
-                      variant="h6" 
+                    <Typography
+                      variant="h6"
                       gutterBottom
-                      sx={{ 
-                        color: '#896C6C', 
+                      sx={{
+                        color: "#896C6C",
                         fontWeight: 600,
-                        mb: 2
+                        mb: 2,
+                        fontSize: { xs: "1.1rem", md: "1.25rem" },
                       }}
                     >
                       {service.title}
                     </Typography>
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
+                    <Typography
+                      variant="body2"
+                      sx={{
                         lineHeight: 1.6,
-                        color: '#5A5A5A'
+                        color: "#5A5A5A",
+                        fontSize: { xs: "0.9rem", md: "1rem" },
                       }}
                     >
                       {service.description}
@@ -403,23 +460,26 @@ const Home = () => {
               </Grid>
             ))}
           </Grid>
-          
-          <Box sx={{ textAlign: 'center', mt: 6 }}>
+
+          <Box sx={{ textAlign: "center", mt: { xs: 6, md: 8 } }}>
             <Button
               variant="contained"
               size="large"
               onClick={() => navigate("/services")}
               sx={{
-                py: 1.5,
-                px: 4,
-                fontSize: '1.1rem',
+                py: { xs: 1.5, md: 2 },
+                px: { xs: 3, md: 4 },
+                fontSize: { xs: "1rem", md: "1.1rem" },
                 fontWeight: 600,
-                background: 'linear-gradient(135deg, #896C6C 0%, #6B5555 100%)',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #6B5555 0%, #896C6C 100%)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 24px rgba(137,108,108,0.3)'
-                }
+                borderRadius: 3,
+                textTransform: "none",
+                background: "linear-gradient(135deg, #896C6C 0%, #6B5555 100%)",
+                "&:hover": {
+                  background:
+                    "linear-gradient(135deg, #6B5555 0%, #896C6C 100%)",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 24px rgba(137,108,108,0.3)",
+                },
               }}
             >
               Explore All Services
@@ -427,114 +487,19 @@ const Home = () => {
           </Box>
         </Container>
       </Box>
-
-      {/* Daily Horoscope Section */}
-      <Box sx={{ py: { xs: 6, md: 8 }, background: 'linear-gradient(135deg, rgba(229,190,181,0.1) 0%, rgba(245,250,225,0.3) 100%)' }}>
+      <Box
+        sx={{
+          py: { xs: 6, md: 8 },
+          background:
+            "linear-gradient(135deg, rgba(229,190,181,0.1) 0%, rgba(245,250,225,0.3) 100%)",
+        }}
+      >
         <Container maxWidth="lg">
-          <Typography
-            variant={isMobile ? "h4" : "h3"}
-            align="center"
-            gutterBottom
-            sx={{
-              color: '#896C6C',
-              fontWeight: 700,
-              mb: 4
-            }}
-          >
-            Daily Horoscope
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            sx={{ mb: 4, color: '#5A5A5A', maxWidth: 800, mx: 'auto', fontSize: { xs: '1rem', md: '1.15rem' } }}
-          >
-            Get your daily horoscope prediction to navigate your day with a positive mindset and be prepared for what the stars have in store.
-          </Typography>
-          <Grid container spacing={3} justifyContent="center">
-            {rashis.map((rashi) => (
-              <Grid item xs={6} sm={4} md={2} key={rashi.id}>
-                <RashiBox rashi={rashi} />
-              </Grid>
-            ))}
-          </Grid>
+          <RashiBox />
         </Container>
       </Box>
-      
-      {/* Testimonials Section */}
-      <Box sx={{ py: { xs: 6, md: 8 }, backgroundColor: '#F5FAE1' }}>
-        <Container maxWidth="lg">
-          <Typography
-            variant={isMobile ? "h4" : "h3"}
-            align="center"
-            gutterBottom
-            sx={{
-              color: '#896C6C',
-              fontWeight: 700,
-              mb: 4
-            }}
-          >
-            What Our Clients Say
-          </Typography>
-          <Grid container spacing={4}>
-            {reviews.slice(0, 3).map((review, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Paper
-                  elevation={3}
-                  sx={{
-                    p: 3,
-                    borderRadius: 3,
-                    background: 'white',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: '0 16px 48px rgba(137,108,108,0.2)'
-                    }
-                  }}
-                >
-                  <Box>
-                    <Rating name="read-only" value={review.rating} readOnly sx={{ color: '#896C6C', mb: 1 }} />
-                    <Typography variant="body1" sx={{ fontStyle: 'italic', mb: 2, color: '#5A5A5A' }}>
-                      "{review.comment}"
-                    </Typography>
-                  </Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#6B5555' }}>
-                    - {review.name}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-          <Box sx={{ textAlign: 'center', mt: 6 }}>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={() => navigate("/testimonials")}
-              sx={{
-                py: 1.5,
-                px: 4,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                color: '#896C6C',
-                borderColor: '#896C6C',
-                '&:hover': {
-                  backgroundColor: 'rgba(137,108,108,0.05)',
-                  borderColor: '#6B5555',
-                  transform: 'translateY(-2px)'
-                }
-              }}
-            >
-              Read All Testimonials
-            </Button>
-          </Box>
-        </Container>
-      </Box>
-
-      {/* Blog Section */}
       <Blog />
+      <DailyHoroscope />
     </Box>
   );
 };

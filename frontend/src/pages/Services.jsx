@@ -57,7 +57,7 @@ const Services = () => {
       duration: '60-75 minutes'
     },
     {
-      id: 'money',
+      id: 'finance',
       name: 'Financial Prosperity',
       image: '/images/finance.jpg',
       icon: <AttachMoney sx={{ fontSize: 40, color: '#896C6C' }} />,
@@ -89,7 +89,18 @@ const Services = () => {
   ];
 
   const handleServiceClick = (serviceId) => {
+    // Navigate directly to contact page with service parameter
     navigate(`/contact/${serviceId}`);
+  };
+
+  const handleBookService = (serviceId, serviceName) => {
+    // Navigate directly to contact page with service parameter and scroll to form
+    navigate(`/contact/${serviceId}`, { 
+      state: { 
+        selectedService: serviceName,
+        scrollToForm: true 
+      } 
+    });
   };
 
   return (
@@ -285,6 +296,10 @@ const Services = () => {
                     fullWidth
                     size="large"
                     className="service-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBookService(service.id, service.name);
+                    }}
                     sx={{ 
                       py: 1.5,
                       fontSize: '1rem',
@@ -292,12 +307,13 @@ const Services = () => {
                       borderRadius: 2,
                       background: 'linear-gradient(135deg, #896C6C 0%, #6B5555 100%)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      textTransform: 'none',
                       '&:hover': {
                         background: 'linear-gradient(135deg, #6B5555 0%, #896C6C 100%)',
                       }
                     }}
                   >
-                    Book {service.name}
+                    Book {service.name} Now
                   </Button>
                 </CardContent>
               </Card>
@@ -355,6 +371,7 @@ const Services = () => {
               borderWidth: 2,
               borderColor: '#896C6C',
               color: '#896C6C',
+              textTransform: 'none',
               '&:hover': {
                 borderWidth: 2,
                 borderColor: '#6B5555',
