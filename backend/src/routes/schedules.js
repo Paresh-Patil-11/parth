@@ -1,22 +1,31 @@
-// routes/schedules.js
 const express = require('express');
 const router = express.Router();
-const { adminAuth } = require('../middleware/auth');
-const {
-  createSchedule,
-  getSchedules,
-  updateScheduleStatus,
-  deleteSchedule,
-  exportSchedules
+const { 
+  createSchedule, 
+  getSchedules, 
+  getScheduleById,
+  updateSchedule, 
+  deleteSchedule, 
+  exportSchedules,
+  getScheduleStats
 } = require('../controllers/scheduleController');
+const { 
+  validateSchedule, 
+  validateScheduleUpdate, 
+  validateId, 
+  validatePagination 
+} = require('../utils/validators');
+const { adminAuth, optionalAuth } = require('../middleware/auth');
 
-// Public route
-router.post('/', createSchedule);
+// Public routes
+router.post('/', validateSchedule, createSchedule);
 
 // Admin routes
-router.get('/', adminAuth, getSchedules);
-router.put('/:id/status', adminAuth, updateScheduleStatus);
-router.delete('/:id', adminAuth, deleteSchedule);
+router.get('/', adminAuth, validatePagination, getSchedules);
+router.get('/stats', adminAuth, getScheduleStats);
 router.get('/export', adminAuth, exportSchedules);
+router.get('/:id', adminAuth, validateId, getScheduleById);
+router.patch('/:id', adminAuth, validateId, validateScheduleUpdate, updateSchedule);
+router.delete('/:id', adminAuth, validateId, deleteSchedule);
 
 module.exports = router;

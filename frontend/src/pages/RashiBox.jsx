@@ -178,7 +178,7 @@ const RashiBox = () => {
           >
             <h1 className="section-title">Astrological Signs</h1>
             <p className="section-subtitle">
-              Click on any zodiac sign to discover detailed insights about personality, career, health, and more
+              Click on any zodiac sign to discover detailed insights about personality, career, health and many more
             </p>
           </div>
 
@@ -239,7 +239,7 @@ const RashiBox = () => {
             padding: ${isMobile ? '1rem' : '1.5rem'}; 
             text-align: center; 
             box-shadow: 0 8px 32px rgba(137,108,108,0.12);
-            height: 100%; 
+            height: 90%; 
             display: flex; 
             flex-direction: column; 
             align-items: center;
@@ -261,7 +261,7 @@ const RashiBox = () => {
             pointer-events: none;
           }
           .skill-card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(+2px) scale(1.02);
             box-shadow: 0 16px 48px rgba(137,108,108,0.25);
             border-color: #896C6C;
           }
@@ -301,7 +301,7 @@ const RashiBox = () => {
           .skill-description { 
             font-size: ${isMobile ? '0.8rem' : '0.9rem'}; 
             color: #5A5A5A; 
-            line-height: 1.4; 
+            line-height: 1.5; 
             margin: 0;
             position: relative;
             z-index: 1;
